@@ -19,8 +19,8 @@ def parse_snpedia_online(soup, rsid):
 
     trs = soup.findChildren("tr")
 
-    columns = {"rsid":str(),
-               "gene":str(),
+
+    columns = {"gene":str(),
                "chr":str(),
                "position":int(),
                "orientation":str(),
@@ -36,7 +36,7 @@ def parse_snpedia_online(soup, rsid):
                 if td.getText() == "Stabilized":
                     columns["orientation"] = tds[index + 1].getText()
                 if td.getText() == "Gene":
-                    columns["gene"] = tds[index + 1].getText()
+                    columns["gene"] = tds[index + 1].getText().strip()
                 if td.getText() == "Reference":
                     columns["reference"] = tds[index + 1].getText()
                 if td.getText() == "Chromosome":
@@ -66,6 +66,8 @@ def query_snpedia_online(rsid: str) -> str:
     @param rsid:
     """
 
+    rsid = rsid.capitalize()
+
     url = "https://bots.snpedia.com/index.php"
     rsid_url = f"{url}/{rsid}"
 
@@ -79,12 +81,13 @@ def query_snpedia_online(rsid: str) -> str:
         columns, genotypes = parse_snpedia_online(soup, rsid)
         print(columns)
         print(genotypes)
+        return columns, genotypes
     else:
         return False
 
 
 
-rsid = "Rs104894370"
+rsid = "rs104894370"
 
 
-query_snpedia_online(rsid)
+columns, genotypes = query_snpedia_online(rsid)

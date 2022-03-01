@@ -110,11 +110,53 @@ def get_rsid_from_table(conn, rsid):
 
 def print_rsid(to_print):
 
+    keys_genotypes = list(to_print["genotypes"])
+    n_genotypes = len(keys_genotypes)
+
+
     cprint(f"\t{to_print['rsid']}\t", attrs=["bold", "underline"])
     # gene
     cprint("\t", end=""), cprint(f"- Gene: ", attrs=["bold"], end=""), cprint(to_print['gene'], end="")
+
+    # genotype_1
+    if len(keys_genotypes) >= 1:
+        cprint("\t\t\t\t", end="")
+        cprint(keys_genotypes[0], to_print["genotypes"][keys_genotypes[0]]["color"], attrs=["bold"], end="")
+        cprint("\t", end="")
+        cprint(str(to_print["genotypes"][keys_genotypes[0]]["magnitude"]), end="")
+        cprint("\t\t", end="")
+        cprint(to_print["genotypes"][keys_genotypes[0]]["summary"], end="")
+
+    print()
+    # chr
+    cprint("\t", end=""), cprint(f"- Chr: ", attrs=["bold"], end=""), cprint(to_print['chr'], end="")
+
+
+    # genotype_2
+    if len(keys_genotypes) >= 2:
+        cprint("\t\t\t\t\t", end="")
+        cprint(keys_genotypes[1], to_print["genotypes"][keys_genotypes[1]]["color"], attrs=["bold"], end="")
+        cprint("\t", end="")
+        cprint(str(to_print["genotypes"][keys_genotypes[1]]["magnitude"]), end="")
+        cprint("\t\t", end="")
+        cprint(to_print["genotypes"][keys_genotypes[1]]["summary"], end="")
+
+    print()
     # orient
     cprint("\t", end=""), cprint(f"- Orient: ", attrs=["bold"], end=""), cprint(to_print['orientation'], end="")
-    # genotype_1
 
+    # genotype_2
+    if len(keys_genotypes) >= 3:
+        cprint("\t\t\t\t", end="")
+        cprint(keys_genotypes[2], to_print["genotypes"][keys_genotypes[2]]["color"], attrs=["bold"], end="")
+        cprint("\t", end="")
+        cprint(str(to_print["genotypes"][keys_genotypes[2]]["magnitude"]), end="")
+        cprint("\t\t", end="")
+        cprint(to_print["genotypes"][keys_genotypes[2]]["summary"], end="")
+
+    print()
+    # position
+    cprint("\t", end=""), cprint(f"- Pos: ", attrs=["bold"], end=""), cprint(str(to_print['position']))
+    # reference
+    cprint("\t", end=""), cprint(f"- Ref: ", attrs=["bold"], end=""), cprint(to_print['reference'])
 

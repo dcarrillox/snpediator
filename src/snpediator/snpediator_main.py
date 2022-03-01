@@ -36,7 +36,7 @@ def main():
     # init local_db
     db_file = "../../database/local_db"
 
-    rsid = "rs1805007"
+    rsid = "rs1800497 "
     rsid = rsid.strip().capitalize()
 
 
@@ -74,18 +74,3 @@ if __name__ == "__main__":
     main()
 
 
-# @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
-# @click.version_option(__version__)
-# def cli():
-#     """Run `snpediator COMMAND -h` for subcommand help"""
-#     pass
-#
-#
-# @cli.command()
-# @click.argument("rsid", required=True, type=str)
-# def query():
-#     return rsid
-#
-# cli.add_command(query)
-#
-# cli()

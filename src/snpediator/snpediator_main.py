@@ -36,7 +36,7 @@ def main():
     # init local_db
     db_file = "../../database/local_db"
 
-    rsid = "rs1800497 "
+    rsid = "rs104894370 "
     rsid = rsid.strip().capitalize()
 
 

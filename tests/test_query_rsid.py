@@ -1,6 +1,8 @@
 import pytest
 
-from snpediator.query_rsid import check_rsid_presence, parse_snpedia_online, query_snpedia_online
+from snpediator.query_rsid import (check_rsid_presence,
+                                   parse_snpedia_online,
+                                   query_snpedia_online)
 
 __author__ = "dcarrillox"
 __copyright__ = "dcarrillox"

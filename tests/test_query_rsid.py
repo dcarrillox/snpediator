@@ -1,6 +1,7 @@
 import pytest
 
-from snpediator.query_rsid import (check_rsid_presence,
+
+from snpediator.query_rsid import (check_rsid_online,
                                    parse_snpedia_online,
                                    query_snpedia_online)
 
@@ -11,7 +12,7 @@ __license__ = "MIT"
 
 def test_no_rsid_online():
     rsid = "xxxxx"
-    assert query_snpedia_online(rsid) == False
+    assert check_rsid_online(rsid) == False
 
 
 def rsid_online():

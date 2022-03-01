@@ -4,6 +4,8 @@ import pathlib
 import sys
 import argparse
 
+
+
 from snpediator import __version__
 from local_db import *
 from query_rsid import *
@@ -32,7 +34,7 @@ def main():
 
     # init local_db
     db_file = "../../database/local_db"
-    rsid = "rs1051730 "
+    rsid = "rs1805007"
     rsid = rsid.strip().capitalize()
 
     conn = create_connection(db_file)
@@ -51,9 +53,16 @@ def main():
 
             # insert results into the local_db
             insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes)
-    else:
-        print(f"RSID {rsid} already in local_db, reading from it...")
 
+        else:
+            print("rsid not found.")
+            sys.exit()
+
+    else:
+        print(f"{rsid} already in local_db, reading from it...")
+
+    to_print = get_rsid_from_table(conn, rsid)
+    print_rsid(to_print)
 
 
 

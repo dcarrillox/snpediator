@@ -1,5 +1,6 @@
 import sqlite3
 from sqlite3 import Error
+from termcolor import colored, cprint
 
 
 def create_connection(db_file):
@@ -77,6 +78,42 @@ def check_isin_table(conn, rsid):
     count = cur.fetchall() # returns [(0,)] or [(1,)]
 
     return False if count[0][0] == 0 else True
+
+def get_rsid_from_table(conn, rsid):
+    to_print = {"genotypes":dict()}
+
+    sql_rsid_columns = """SELECT * FROM columns_db WHERE rsid == ? """
+    cur = conn.cursor()
+    cur.execute(sql_rsid_columns, (rsid,))
+    columns = cur.fetchall()[0]
+
+    features = ["rsid", "gene", "chr", "position", "orientation", "reference"]
+    for feature, column in zip(features, columns):
+        to_print[feature] = column
+
+
+    sql_rsid_genotypes = """SELECT * FROM genotypes_db WHERE rsid == ? """
+    cur = conn.cursor()
+    cur.execute(sql_rsid_genotypes, (rsid,))
+    genotypes = cur.fetchall()
+
+    features = ["magnitude", "color", "summary"]
+    for genotype in genotypes:
+        genotype_alleles = genotype[2]
+        to_print["genotypes"][genotype_alleles] = dict()
+        for feature, value in zip(features, genotype[3:]):
+            to_print["genotypes"][genotype_alleles][feature] = value
+
+    return to_print
+
+def print_rsid(to_print):
+
+    cprint(f"\t{to_print['rsid']}\t", attrs=["bold", "underline"])
+    # gene
+    cprint("\t", end=""), cprint(f"- Gene: ", attrs=["bold"], end=""), cprint(to_print['gene'], end="")
+    # orient
+    cprint("\t", end=""), cprint(f"- Orient: ", attrs=["bold"], end=""), cprint(to_print['orientation'], end="")
+    # genotype_1
 
 
 

@@ -53,7 +53,7 @@ def insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes):
         cur = conn.cursor()
         cur.execute(sql_insert_columns, columns_values)
 
-
+        
     # insert multiple genotypes
     for genotype in rsid_genotypes:
         genotype_values = [rsid_genotypes[genotype][feature] for feature in rsid_genotypes[genotype]]
@@ -67,6 +67,7 @@ def insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes):
         with conn:
             cur.execute(sql_insert_genotypes, genotype_values)
 
+            
 def check_isin_table(conn, rsid):
     rsid = rsid.capitalize()
 
@@ -78,6 +79,7 @@ def check_isin_table(conn, rsid):
     count = cur.fetchall() # returns [(0,)] or [(1,)]
 
     return False if count[0][0] == 0 else True
+
 
 def get_rsid_from_table(conn, rsid):
     to_print = {"genotypes":dict()}
@@ -114,6 +116,5 @@ def print_rsid(to_print):
     # orient
     cprint("\t", end=""), cprint(f"- Orient: ", attrs=["bold"], end=""), cprint(to_print['orientation'], end="")
     # genotype_1
-
 
 

@@ -10,6 +10,7 @@ from snpediator import __version__
 from local_db import *
 from query_rsid import *
 
+
 __author__ = "dcarrillox"
 __copyright__ = "dcarrillox"
 __license__ = "MIT"
@@ -34,13 +35,16 @@ def main():
 
     # init local_db
     db_file = "../../database/local_db"
+
     rsid = "rs1805007"
     rsid = rsid.strip().capitalize()
+
 
     conn = create_connection(db_file)
     create_tables(conn)
 
     isin_table = check_isin_table(conn, rsid)
+
 
     if not isin_table:
 
@@ -63,17 +67,6 @@ def main():
 
     to_print = get_rsid_from_table(conn, rsid)
     print_rsid(to_print)
-
-
-
-
-
-
-
-
-
-
-
 
 
 

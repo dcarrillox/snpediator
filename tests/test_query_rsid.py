@@ -1,5 +1,6 @@
 import pytest
 
+
 from snpediator.query_rsid import (check_rsid_online,
                                    parse_snpedia_online,
                                    query_snpedia_online)

@@ -11,7 +11,7 @@ __license__ = "MIT"
 
 def test_no_rsid_online():
     rsid = "xxxxx"
-    assert query_snpedia_online(rsid) == False
+    assert check_rsid_online(rsid) == False
 
 
 def rsid_online():

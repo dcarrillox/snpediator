@@ -9,6 +9,18 @@
 
 import pytest
 import shutil
+import os
+
+
+def pytest_sessionstart(session):
+    """
+    Called after the Session object has been created and
+    before performing collection and entering the run test loop.
+    """
+
+    os.makedirs("tests/database_test")
+
+
 
 def pytest_sessionfinish(session, exitstatus):
     """

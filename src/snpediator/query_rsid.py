@@ -2,7 +2,15 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def check_rsid_presence(soup):
+def check_rsid_online(rsid):
+
+    rsid = rsid.capitalize()
+
+    url = "https://bots.snpedia.com/index.php"
+    rsid_url = f"{url}/{rsid}"
+
+    page = requests.get(rsid_url)
+    soup = BeautifulSoup(page.content, "html.parser")
 
     # target text meaning the rsid is not in snpedia online
     target = "There is currently no text in this page."
@@ -16,11 +24,13 @@ def check_rsid_presence(soup):
     return True
 
 def parse_snpedia_online(soup, rsid):
+    rsid = rsid.capitalize()
 
     trs = soup.findChildren("tr")
 
 
-    columns = {"gene":str(),
+    columns = {"rsid":rsid,
+               "gene":str(),
                "chr":str(),
                "position":int(),
                "orientation":str(),
@@ -42,7 +52,7 @@ def parse_snpedia_online(soup, rsid):
                 if td.getText() == "Chromosome":
                     columns["chr"] = tds[index + 1].getText()
                 if td.getText() == "Position":
-                    columns["position"] = tds[index + 1].getText()
+                    columns["position"] = int(tds[index + 1].getText())
 
                 a = td.find("a")
                 if a:
@@ -57,37 +67,26 @@ def parse_snpedia_online(soup, rsid):
 
     return columns, genotypes
 
-def query_snpedia_online(rsid: str) -> str:
+def query_snpedia_online(rsid):
     """
-    Queries the rsid at https://bots.snpedia.com/index.php.
-    If there is a page for the rsid, returns a BeautifulSoup object with it,
-    otherwise it returns None.
 
+
+    @param soup:
     @param rsid:
     """
 
     rsid = rsid.capitalize()
-
     url = "https://bots.snpedia.com/index.php"
     rsid_url = f"{url}/{rsid}"
 
     page = requests.get(rsid_url)
     soup = BeautifulSoup(page.content, "html.parser")
 
-    # check if the rsid is online
-    is_online =  check_rsid_presence(soup)
-
-    if is_online:
-        columns, genotypes = parse_snpedia_online(soup, rsid)
-        print(columns)
-        print(genotypes)
-        return columns, genotypes
-    else:
-        return False
+    columns, genotypes = parse_snpedia_online(soup, rsid)
+    print(columns)
+    print(genotypes)
+    return columns, genotypes
 
 
 
-rsid = "rs104894370"
 
-
-columns, genotypes = query_snpedia_online(rsid)

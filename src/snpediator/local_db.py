@@ -49,6 +49,7 @@ def insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes):
     rsid = rsid.capitalize()
 
     columns_values = [rsid_columns[column] for column in rsid_columns]
+
     sql_insert_columns = ''' INSERT INTO columns_db(rsid,gene,chr,position,orientation,reference)
                                 VALUES(?,?,?,?,?,?) '''
 
@@ -70,6 +71,21 @@ def insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes):
             cur.execute(sql_insert_genotypes, genotype_values)
 
 
+        
+    # insert multiple genotypes
+    for genotype in rsid_genotypes:
+        genotype_values = [rsid_genotypes[genotype][feature] for feature in rsid_genotypes[genotype]]
+        genotype_values.insert(0, genotype)
+        genotype_values.insert(0, rsid)
+
+        print(genotype_values)
+        sql_insert_genotypes = ''' INSERT INTO genotypes_db(rsid,genotype,magnitude,color,summary)
+                                        VALUES(?,?,?,?,?) '''
+
+        with conn:
+            cur.execute(sql_insert_genotypes, genotype_values)
+
+            
 def check_isin_table(conn, rsid):
     rsid = rsid.capitalize()
 

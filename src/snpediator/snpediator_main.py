@@ -6,8 +6,10 @@ from platformdirs import *
 
 
 from snpediator import __version__
+
 from snpediator.local_db import *
 from snpediator.query_rsid import *
+
 
 
 __author__ = "dcarrillox"
@@ -34,15 +36,16 @@ def main():
     appauthor = "dcarrillox"
 
     # init local_db
+
     db_path = user_data_dir(appname, appauthor)
     os.makedirs(db_path, exist_ok=True)
     db_file = db_path + "/snpediator_local.db"
     #os.remove(db_file)
 
+
     rsid = "rs6152  "
     rsid = rsid.strip().capitalize()
     rsid = args.rsid.strip().capitalize()
-
 
 
     conn = create_connection(db_file)
@@ -72,6 +75,7 @@ def main():
     else:
         print()
         print(f"{rsid} already in local_db, reading from it...")
+
 
     to_print = get_rsid_from_table(conn, rsid)
     print_rsid(to_print)

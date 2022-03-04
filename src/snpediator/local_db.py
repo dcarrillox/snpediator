@@ -1,6 +1,8 @@
 import sqlite3
 from sqlite3 import Error
-from termcolor import colored, cprint
+from columnar import columnar
+from click import style
+from termcolor import cprint
 
 
 def create_connection(db_file):
@@ -12,6 +14,7 @@ def create_connection(db_file):
         print(e)
 
     return conn
+
 
 def create_tables(conn):
 
@@ -40,12 +43,12 @@ def create_tables(conn):
     except Error as e:
         print(e)
 
+
 def insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes):
 
     rsid = rsid.capitalize()
 
     columns_values = [rsid_columns[column] for column in rsid_columns]
-    print(columns_values)
     sql_insert_columns = ''' INSERT INTO columns_db(rsid,gene,chr,position,orientation,reference)
                                 VALUES(?,?,?,?,?,?) '''
 
@@ -60,20 +63,18 @@ def insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes):
         genotype_values.insert(0, genotype)
         genotype_values.insert(0, rsid)
 
-        print(genotype_values)
         sql_insert_genotypes = ''' INSERT INTO genotypes_db(rsid,genotype,magnitude,color,summary)
                                         VALUES(?,?,?,?,?) '''
 
         with conn:
             cur.execute(sql_insert_genotypes, genotype_values)
 
-            
+
 def check_isin_table(conn, rsid):
     rsid = rsid.capitalize()
 
     sql_isin_table = ''' SELECT count(*) FROM columns_db WHERE rsid == ?'''
 
-    print(rsid)
     cur = conn.cursor()
     cur.execute(sql_isin_table, (rsid,))
     count = cur.fetchall() # returns [(0,)] or [(1,)]
@@ -108,55 +109,85 @@ def get_rsid_from_table(conn, rsid):
 
     return to_print
 
+
 def print_rsid(to_print):
 
     keys_genotypes = list(to_print["genotypes"])
-    n_genotypes = len(keys_genotypes)
+
+    patterns = [
+        ("- Gene:", lambda text: style(text, bold=True)),
+        ("- Chr:", lambda text: style(text, bold=True)),
+        ("- Orient:", lambda text: style(text, bold=True)),
+        ("- Pos:", lambda text: style(text, bold=True)),
+        ("- Ref:", lambda text: style(text, bold=True))
+    ]
+
+    lines = list()
+
+    # line_1
+    print()
+    cprint(f"    {to_print['rsid']}    ", attrs=["bold", "underline"])
 
 
-    cprint(f"\t{to_print['rsid']}\t", attrs=["bold", "underline"])
-    # gene
-    cprint("\t", end=""), cprint(f"- Gene: ", attrs=["bold"], end=""), cprint(to_print['gene'], end="")
-
-    # genotype_1
+    ## TABLE ##
+    # line_2
+    line_2 = ["- Gene:", to_print['gene'] ]
     if len(keys_genotypes) >= 1:
-        cprint("\t\t\t\t", end="")
-        cprint(keys_genotypes[0], to_print["genotypes"][keys_genotypes[0]]["color"], attrs=["bold"], end="")
-        cprint("\t", end="")
-        cprint(str(to_print["genotypes"][keys_genotypes[0]]["magnitude"]), end="")
-        cprint("\t\t", end="")
-        cprint(to_print["genotypes"][keys_genotypes[0]]["summary"], end="")
+        line_2 += ["\t\t\t\t", keys_genotypes[0], "", str(to_print["genotypes"][keys_genotypes[0]]["magnitude"]), "",
+                   to_print["genotypes"][keys_genotypes[0]]["summary"]]
+        re_pattern = keys_genotypes[0].replace("(", "\(").replace(")", "\)")
+        geno_pattern = (re_pattern,
+                         lambda text: style(text, bold=True, fg=to_print["genotypes"][keys_genotypes[0]]["color"]))
 
-    print()
-    # chr
-    cprint("\t", end=""), cprint(f"- Chr: ", attrs=["bold"], end=""), cprint(to_print['chr'], end="")
+        patterns.append(geno_pattern)
+        lines.append(line_2)
 
-
-    # genotype_2
+    # line_3
+    line_3 = ["- Chr:", to_print['chr']]
     if len(keys_genotypes) >= 2:
-        cprint("\t\t\t\t\t", end="")
-        cprint(keys_genotypes[1], to_print["genotypes"][keys_genotypes[1]]["color"], attrs=["bold"], end="")
-        cprint("\t", end="")
-        cprint(str(to_print["genotypes"][keys_genotypes[1]]["magnitude"]), end="")
-        cprint("\t\t", end="")
-        cprint(to_print["genotypes"][keys_genotypes[1]]["summary"], end="")
+        line_3 += ["", keys_genotypes[1], "", str(to_print["genotypes"][keys_genotypes[0]]["magnitude"]), "",
+                   to_print["genotypes"][keys_genotypes[1]]["summary"]]
+        re_pattern = keys_genotypes[1].replace("(", "\(").replace(")", "\)")
+        geno_pattern = (re_pattern,
+                         lambda text: style(text, bold=True, fg=to_print["genotypes"][keys_genotypes[1]]["color"]))
 
-    print()
-    # orient
-    cprint("\t", end=""), cprint(f"- Orient: ", attrs=["bold"], end=""), cprint(to_print['orientation'], end="")
+        patterns.append(geno_pattern)
+        lines.append(line_3)
 
-    # genotype_2
+    # line_4
+    line_4 = ["- Orient:", to_print['orientation']]
     if len(keys_genotypes) >= 3:
-        cprint("\t\t\t\t", end="")
-        cprint(keys_genotypes[2], to_print["genotypes"][keys_genotypes[2]]["color"], attrs=["bold"], end="")
-        cprint("\t", end="")
-        cprint(str(to_print["genotypes"][keys_genotypes[2]]["magnitude"]), end="")
-        cprint("\t\t", end="")
-        cprint(to_print["genotypes"][keys_genotypes[2]]["summary"], end="")
+        line_4 += ["", keys_genotypes[2], "", str(to_print["genotypes"][keys_genotypes[2]]["magnitude"]), "",
+                   to_print["genotypes"][keys_genotypes[2]]["summary"]]
+        re_pattern = keys_genotypes[2].replace("(", "\(").replace(")", "\)")
+        geno_pattern = (re_pattern,
+                        lambda text: style(text, bold=True,fg=to_print["genotypes"][keys_genotypes[2]]["color"]))
 
-    print()
-    # position
-    cprint("\t", end=""), cprint(f"- Pos: ", attrs=["bold"], end=""), cprint(str(to_print['position']))
-    # reference
-    cprint("\t", end=""), cprint(f"- Ref: ", attrs=["bold"], end=""), cprint(to_print['reference'])
+        patterns.append(geno_pattern)
+        lines.append(line_4)
+
+    # line_5
+    line_5 = ["- Pos:", to_print['position']] + [""]*(len(line_2)-2)
+    lines.append(line_5)
+
+    # line_6
+    line_6 = ["- Ref:", to_print['reference']] + [""]*(len(line_2)-2)
+    lines.append(line_6)
+
+
+    # justify
+    if len(line_2) > 2:
+        justify_text=["c", "l", "c", "c", "c", "c", "c", "l"]
+    else:
+        justify_text = ["c", "l"]
+
+
+    table = columnar(lines,
+                     patterns=patterns,
+                     min_column_width=2,
+                     headers=None,
+                     justify=justify_text,
+                     no_borders=True
+                     )
+    print(table)
 

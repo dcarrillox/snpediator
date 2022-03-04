@@ -67,6 +67,7 @@ def parse_snpedia_online(soup, rsid):
                     title = a.get('href')
                     geno = title.replace(f"/index.php/{rsid}", "")
                     if f"/index.php/{rsid}(" in title:
+
                         if geno not in genotypes:
                             genotypes[geno] = {"magnitude": str(), "color": str(), "summary": str()}
                             page_magnitude = tds[index + 1].getText().strip()
@@ -93,8 +94,7 @@ def query_snpedia_online(rsid):
     soup = BeautifulSoup(page.content, "html.parser")
 
     columns, genotypes = parse_snpedia_online(soup, rsid)
-    print(columns)
-    print(genotypes)
+
     return columns, genotypes
 
 

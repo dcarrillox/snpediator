@@ -33,17 +33,39 @@
 snpediator
 ==========
 
+Queries SNPedia to retrieve basic SNP information:
 
-    Add a short description here!
+- Gene
+
+- Chromosome
+
+- Genotypes
+
+- Stabilized Orientation
+
+- Position
+
+- Reference Version
 
 
-A longer description of your project goes here...
+
+Install
+=======
 
 
-.. _pyscaffold-notes:
+   pip install snpediator
 
-Note
-====
 
-This project has been set up using PyScaffold 4.1.5. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
+Run
+===
+
+
+   snpediator -h
+   
+   snpediator -r <RSID>
+
+
+
+   
+
+

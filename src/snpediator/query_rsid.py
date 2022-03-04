@@ -23,6 +23,14 @@ def check_rsid_online(rsid):
             return False
     return True
 
+def translate_color(page_color):
+    if page_color == "#ff8080":
+        return "red"
+    elif page_color == "#80ff80":
+        return "green"
+    else:
+        return "white"
+
 def parse_snpedia_online(soup, rsid):
     rsid = rsid.capitalize()
 
@@ -59,10 +67,13 @@ def parse_snpedia_online(soup, rsid):
                     title = a.get('href')
                     geno = title.replace(f"/index.php/{rsid}", "")
                     if f"/index.php/{rsid}(" in title:
+
                         if geno not in genotypes:
                             genotypes[geno] = {"magnitude": str(), "color": str(), "summary": str()}
-                            genotypes[geno]["magnitude"] = float(tds[index + 1].getText().strip())
-                            genotypes[geno]["color"] = tds[index + 1].get("style").split(" background: ")[1].strip()
+                            page_magnitude = tds[index + 1].getText().strip()
+                            genotypes[geno]["magnitude"] = float(page_magnitude) if page_magnitude else "NaN"
+                            page_color = tds[index + 1].get("style").split(" background: ")[1].strip()
+                            genotypes[geno]["color"] = translate_color(page_color)
                             genotypes[geno]["summary"] = tds[index + 2].getText().strip()
 
     return columns, genotypes
@@ -83,8 +94,7 @@ def query_snpedia_online(rsid):
     soup = BeautifulSoup(page.content, "html.parser")
 
     columns, genotypes = parse_snpedia_online(soup, rsid)
-    print(columns)
-    print(genotypes)
+
     return columns, genotypes
 
 

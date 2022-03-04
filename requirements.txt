@@ -2,10 +2,13 @@ attrs==21.4.0
 beautifulsoup4==4.10.0
 certifi==2021.10.8
 charset-normalizer==2.0.12
+click==8.0.4
+Columnar==1.4.1
 coverage==6.3.2
 idna==3.3
 iniconfig==1.1.1
 packaging==21.3
+platformdirs==2.5.1
 pluggy==1.0.0
 py==1.11.0
 pyparsing==3.0.7
@@ -14,4 +17,6 @@ pytest-cov==3.0.0
 requests==2.27.1
 soupsieve==2.3.1
 tomli==2.0.1
+toolz==0.11.2
 urllib3==1.26.8
+wcwidth==0.2.5

@@ -3,3 +3,7 @@ coverage:
     project:
       default:
         target: 20%
+        
+    # do not run coverage on patch nor changes
+    patch: no
+    changes: no

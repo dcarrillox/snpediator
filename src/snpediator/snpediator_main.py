@@ -40,10 +40,7 @@ def main():
     db_path = user_data_dir(appname, appauthor)
     os.makedirs(db_path, exist_ok=True)
     db_file = db_path + "/snpediator_local.db"
-    #os.remove(db_file)
 
-
-    rsid = "rs6152  "
     rsid = rsid.strip().capitalize()
     rsid = args.rsid.strip().capitalize()
 

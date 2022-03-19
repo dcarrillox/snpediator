@@ -78,7 +78,6 @@ def insert_in_tables(conn, rsid, rsid_columns, rsid_genotypes):
         genotype_values.insert(0, genotype)
         genotype_values.insert(0, rsid)
 
-        print(genotype_values)
         sql_insert_genotypes = ''' INSERT INTO genotypes_db(rsid,genotype,magnitude,color,summary)
                                         VALUES(?,?,?,?,?) '''
 

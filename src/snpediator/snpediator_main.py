@@ -43,7 +43,6 @@ def main():
     #os.remove(db_file)
 
 
-    rsid = "rs6152  "
     rsid = rsid.strip().capitalize()
     rsid = args.rsid.strip().capitalize()
 
